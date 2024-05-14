@@ -35,6 +35,7 @@ export async function addProject(name: string) {
     .collection('projects')
     .create({
       name,
+      created_by: pb.authStore.model?.id,
       status: 'not started',
     })
 
@@ -53,6 +54,7 @@ export async function addTask(
 ) {
   const newTask = await pb.collection('tasks').create({
     project: project_id,
+    created_by: pb.authStore.model?.id,
     text,
   })
 
@@ -65,6 +67,7 @@ export async function getTasks({
 }): Promise<TasksResponse<TexpandProject>[]> {
   const options = {
     filter: '',
+    sort: '-starred_on, created',
   }
   let filter = `completed = ${done}`
   filter += ` && project = "${project_id}"`
@@ -134,4 +137,49 @@ export async function getStarredTasks(): Promise<
     .getFullList(options)
 
   return tasks
+}
+export function processImages(task: TasksResponse) {
+  type ImageItem = {
+    name: string
+    url: string
+    url_larger: string
+  }
+
+  const images: ImageItem[] = []
+
+  task.images?.map((image: string) => {
+    images.push({
+      name: image,
+      url: pb.files.getUrl(task, image, {
+        thumb: '0x200',
+      }),
+      url_larger: pb.files.getUrl(task, image, {
+        thumb: '0x800',
+      }),
+    })
+  })
+
+  return images
+}
+export async function addTeam(name: string) {
+  let team = await pb.collection('teams').create({
+    name,
+    created_by: pb.authStore.model?.id,
+    status: 'inactive',
+  })
+
+  return team
+}
+export async function getTeam(id: string) {
+  const team = await pb.collection('teams').getOne(id)
+
+  return team
+}
+
+export async function userIsTeamOwner(team_id: string) {
+  const team = await getTeam(team_id)
+  if (team.created_by === pb.authStore.model?.id) {
+    return true
+  }
+  return false
 }
