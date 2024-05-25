@@ -1,11 +1,13 @@
 ---
 export const partial = true
 
-import { deleteTask, updateTask } from '@data/pocketbase'
+import { deleteTask, updateTask, getTask } from '@data/pocketbase'
 
 import TasksList from '@components/app/tasks/TasksList.astro'
 
 const { task_id = '', project_id = '' } = Astro.params
+
+const task = await getTask(task_id)
 
 if (Astro.request.method === 'DELETE') {
   try {
@@ -88,5 +90,5 @@ if (Astro.request.method === 'PUT') {
   <TasksList done={true} project_id={project_id} />
 </div>
 <div id="starred-tasks-list" hx-swap-oob="true">
-  <TasksList starred={true} />
+  <TasksList starred={true} team_id={task?.expand?.project?.team} />
 </div>

@@ -1,5 +1,6 @@
 ---
 import TasksList from '@components/app/tasks/TasksList.astro'
+import Invites from '@components/app/dashboard/Invites.astro'
 
 import LayoutApp from '@layouts/LayoutApp.astro'
 
@@ -24,6 +25,9 @@ const projects = await getProjects({})
       </div>
       Projects
     </div>
+
+    <Invites />
+
     <div id="starred-tasks-list">
       <TasksList starred={true} />
     </div>
