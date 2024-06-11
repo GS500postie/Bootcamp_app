@@ -1,3 +1,4 @@
 {
-    "cSpell.diagnosticLevel": "Hint"
+    "cSpell.diagnosticLevel": "Hint",
+    "workbench.editor.enablePreview": false
 }
