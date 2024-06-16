@@ -131,7 +131,7 @@ import '@fontsource/m-plus-rounded-1c/800.css'
     </script>
   </head>
 
-  <body x-data hx-boost="true">
+  <body x-data hx-boost="true" class="select-none">
     <main class="min-h-screen dark:bg-black dark:text-white">
       <div class="max-w-5xl px-4 py-4 mx-auto">
         <dialog></dialog>
@@ -143,6 +143,7 @@ import '@fontsource/m-plus-rounded-1c/800.css'
             <div x-show="showMenu" x-cloak>
               <Sidebar />
             </div>
+            <div id="slot"></div>
             <slot />
           </div>
         </div>
